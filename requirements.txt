@@ -1,29 +1,18 @@
-# Agentic Research Assistant - Dependencies
+# Core LLM & Orchestration (1.x Series)
+langchain>=1.3.0
+langchain-core>=1.3.2
+langchain-community>=0.3.7
+langgraph>=1.1.0
 
-# Core LLM & Orchestration
-langchain==0.3.7
-langchain-community==0.3.7
-langgraph==0.2.45
-langgraph-checkpoint==1.0.12
+# LLM Providers (Updated for Core 1.x)
+langchain-openai>=0.3.26
+langchain-groq>=0.2.1
+langchain-google-genai>=2.0.4
 
-# LLM Providers (Free tier)
-langchain-groq==0.2.1
-langchain-google-genai==2.0.4
-
-# Vector Store
-faiss-cpu==1.9.0
-
-# Document Loading & Processing
-pypdf==4.3.1
-tiktoken==0.8.0
-
-# UI
-streamlit==1.40.1
+# Vector Store & UI
+faiss-cpu>=1.9.0
+streamlit>=1.40.1
 
 # Utilities
-python-dotenv==1.0.1
-pydantic==2.9.2
-numpy==1.26.4
-
-# Dev
-rich==13.9.4
+pydantic>=2.9.2
+numpy>=1.26.0,<2.0.0
