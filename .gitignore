@@ -1,0 +1,18 @@
+# Environments
+.env
+.venv
+env/
+venv/
+ARA/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# IDEs/Editors
+.vscode/
+
+# OS generated files
+.DS_Store
+Thumbs.db
