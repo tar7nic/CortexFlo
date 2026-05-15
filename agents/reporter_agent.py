@@ -7,10 +7,7 @@ from config import GROQ_API_KEY, LLM_MODEL, MAX_TOKENS
 
 def reporter_agent(state: dict) -> dict:
     rprint(f"[bold magenta][Reporter Agent][/bold magenta] Generating report...")
-    
-    if len(context) > 3000:
-        context = context[:3000] + "...[truncated]"
-    
+
     llm = ChatGroq(api_key=GROQ_API_KEY, model=LLM_MODEL, max_tokens=MAX_TOKENS)
 
     prompt = f"""You are a professional research report writer.
