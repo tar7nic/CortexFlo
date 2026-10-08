@@ -8,7 +8,8 @@ sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pickle
 import faiss
 import numpy as np
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+# from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from rich import print as rprint
 from config import GOOGLE_API_KEY, EMBEDDING_MODEL, TOP_K_RETRIEVAL
 
@@ -22,7 +23,8 @@ def load_index():
 
 def retrieve(query, top_k=TOP_K_RETRIEVAL):
     index, metadata = load_index()
-    embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL, google_api_key=GOOGLE_API_KEY)
+    # embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL, google_api_key=GOOGLE_API_KEY)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     vector = np.array([embeddings.embed_query(query)], dtype=np.float32)
     distances, indices = index.search(vector, top_k)
     results = []

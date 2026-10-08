@@ -1,13 +1,15 @@
 import ssl
 import certifi
 import os
+import time
 os.environ["SSL_CERT_FILE"] = certifi.where()
 os.environ["REQUESTS_CA_BUNDLE"] = certifi.where()
 import sys
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pickle
 from pypdf import PdfReader
-from langchain_google_genai import GoogleGenerativeAIEmbeddings
+# from langchain_google_genai import GoogleGenerativeAIEmbeddings
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 import faiss
 import numpy as np
@@ -42,13 +44,9 @@ def chunk_pages(pages):
     return chunks
 
 def embed_and_index(chunks):
-    embeddings = GoogleGenerativeAIEmbeddings(model=EMBEDDING_MODEL, google_api_key=GOOGLE_API_KEY)
+    embeddings = HuggingFaceEmbeddings(model_name="sentence-transformers/all-MiniLM-L6-v2")
     texts = [c["text"] for c in chunks]
-    all_vectors = []
-    for i in range(0, len(texts), 50):
-        all_vectors.extend(embeddings.embed_documents(texts[i:i+50]))
-        rprint(f"  Embedded {min(i+50, len(texts))}/{len(texts)}")
-    vectors = np.array(all_vectors, dtype=np.float32)
+    vectors = np.array(embeddings.embed_documents(texts), dtype=np.float32)
     index = faiss.IndexFlatL2(vectors.shape[1])
     index.add(vectors)
     faiss.write_index(index, INDEX_PATH)

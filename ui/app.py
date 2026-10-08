@@ -363,16 +363,19 @@ if run_btn:
     else:
         st.markdown('<hr class="cf-divider">', unsafe_allow_html=True)
 
-        with st.spinner(f"Indexing {len(uploaded_files)} document(s)…"):
-            with tempfile.TemporaryDirectory() as tmpdir:
-                for f in uploaded_files:
-                    with open(os.path.join(tmpdir, f.name), "wb") as out:
-                        out.write(f.read())
-                pages = extract_text_from_pdfs(tmpdir)
-                chunks = chunk_pages(pages)
-                embed_and_index(chunks)
+        # Ingest (only if files changed) + run pipeline
+        with st.spinner("Indexing documents and running agents…"):
+            sig = tuple(sorted((f.name, f.size) for f in uploaded_files))
+            if st.session_state.get("indexed_sig") != sig:
+                with tempfile.TemporaryDirectory() as tmpdir:
+                    for f in uploaded_files:
+                        with open(os.path.join(tmpdir, f.name), "wb") as out:
+                            out.write(f.getbuffer())
+                    pages = extract_text_from_pdfs(tmpdir)
+                    chunks = chunk_pages(pages)
+                    embed_and_index(chunks)
+                st.session_state.indexed_sig = sig
 
-        with st.spinner("Running agent pipeline…"):
             result = run_pipeline(query)
 
         # ── Trace + Sources ────────────────────────────────────────────────────
